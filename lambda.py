@@ -47,7 +47,7 @@ def getToken(accountId):
         #get session to target aws account.
 	response = sts_client.assume_role(
     	RoleArn=get_ssm_parameters_role(accountId),
-    	RoleSessionName="scheduler-session"
+    	RoleSessionName="EC2-Scheduler"
         )
         #set aws access config
 	SESSION_KEY["aws_access_key_id"]=response['Credentials']['AccessKeyId']
@@ -86,16 +86,22 @@ class Ec2:
 		return sch_ec2_list
 
 	def stop_ec2(self,instance_ids):
-		response = self.ec2_client.stop_instances(
+		if not instance_ids:
+			print("NO SUCH INSTANCES!!!");
+		else:
+			response = self.ec2_client.stop_instances(
 	    		InstanceIds=instance_ids)
-		print(response)
-		print('###{0} STOPT###'.format(instance_ids))
+			print(response)
+			print('###{0} STOPT###'.format(instance_ids))
 		
 	def start_ec2(self,instance_ids):
-		response = self.ec2_client.start_instances(
+		if not instance_ids:
+			print("NO SUCH INSTANCES!!!");
+		else:
+			response = self.ec2_client.start_instances(
     			InstanceIds=instance_ids)
-		print(response)
-		print('###{0} START###'.format(instance_ids))
+			print(response);
+			print('###{0} START###'.format(instance_ids));
 
 def lambda_handler(event, context):
 	# TODO implement
@@ -116,8 +122,8 @@ def lambda_handler(event, context):
 		sch_instnaces[i]=ec2.get_ec2_lists(SCH_TIME);
 		
 		if event['ACTION'] == "STOP":
-			#ec2.stop_ec2(sch_instnaces[i]);
-			print("Stop Instances")
+			print('###{0} EC2 STOP###'.format(i));
+			ec2.stop_ec2(sch_instnaces[i]);
 		elif event['ACTION'] == "START" :
-			#ec2.start_ec2(sch_instnaces[i]);
-			print("Start Instances")
+			print('###{0} EC2 START###'.format(i));
+			ec2.start_ec2(sch_instnaces[i]);
