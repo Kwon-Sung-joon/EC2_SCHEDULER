@@ -92,7 +92,7 @@ class Ec2:
 		print('###{0} STOPT###'.format(instance_ids))
 		
 	def start_ec2(self,instance_ids):
-		response = self.ec2_client.start_db_instance(
+		response = self.ec2_client.start_instances(
     			InstanceIds=instance_ids)
 		print(response)
 		print('###{0} START###'.format(instance_ids))
