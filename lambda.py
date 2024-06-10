@@ -80,7 +80,7 @@ class Ec2:
 	
 		ec2_instances=response.get("Reservations")
 		for i in range(len(ec2_instances)):
-			sch_ec2_list.append(ec2_instances[0]['Instances'][0]['InstanceId']);
+			sch_ec2_list.append(ec2_instances[i]['Instances'][0]['InstanceId']);
 		print("##Schedule EC2 Lists###")			
 		print(sch_ec2_list)		
 		return sch_ec2_list
